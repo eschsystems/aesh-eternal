@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST http://localhost:3000/api/insight -H 'content-type: application/json' -d '{\"kind\":\"rag\",\"payload\":\"smoke test after insight rename\",\"tags\":[\"test\"],\"scene_id\":\"scene-001-terminal\"}')",
+      "Bash(curl -s http://localhost:3000/api/insight)",
+      "Bash(curl -s -o /dev/null -w \"ttf: HTTP %{http_code} %{size_download} bytes\\\\n\" http://localhost:3000/fonts/adamesch-regular.ttf)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(npm run *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(pkill -f \"node.*next\")",
+      "Bash(curl -s -o /dev/null -w \"served: HTTP %{http_code} %{size_download} bytes · type %{content_type}\\\\n\" http://localhost:3000/artifacts/internet-adoption-1995.jpg)",
+      "Bash(curl -s -o /dev/null -w \"audio served: HTTP %{http_code} %{size_download} bytes · %{content_type}\\\\n\" http://localhost:3000/sounds/youve-got-mail.mp3)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/esch/Dev/æsh-eternal/public/artifacts/apple-macintosh-se30.jpg)",
+      "Bash(curl -s -o /dev/null -w \"PDF probe: HTTP %{http_code} %{size_download} bytes · %{content_type}\\\\n\" http://localhost:3000/artifacts/adam-esch-hextuple-class.pdf)",
+      "Bash(curl -s http://localhost:3000/api/scene/scene-004-council)",
+      "Bash(curl -s -o /dev/null -w \"PDF: HTTP %{http_code} %{size_download} bytes · %{content_type}\\\\n\" http://localhost:3000/artifacts/adam-esch-character-sheet.pdf)",
+      "Bash(disown)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/api/scene/scene-005-gas-station)",
+      "Bash(curl -s -X POST http://localhost:3000/api/insight -H 'content-type: application/json' -d '{\"kind\":\"rag\",\"payload\":\"reveal scene smoke test\",\"tags\":[\"test\"],\"scene_id\":\"scene-006-export\"}')",
+      "Bash(curl -s \"http://localhost:3000/api/export?format=jsonl\")",
+      "Bash(git init *)",
+      "Bash(git symbolic-ref *)",
+      "Bash(git add *)"
+    ]
+  }
+}

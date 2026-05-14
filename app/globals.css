@@ -1,0 +1,601 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #000000;
+  --bg-elev: #0a0a0a;
+  --fg: #d8f5d8;
+  --fg-muted: #6a8a6a;
+  --accent: #33ff66;
+  --accent-dim: #1f7a3a;
+  --rule: #1a2a1a;
+  --warn: #ffd24a;
+  --kind-rag: #6ad8ff;
+  --kind-sft: #ffd24a;
+  --kind-dpo: #ff7ad8;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-rule: var(--rule);
+  --color-warn: var(--warn);
+  --color-kind-rag: var(--kind-rag);
+  --color-kind-sft: var(--kind-sft);
+  --color-kind-dpo: var(--kind-dpo);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-term), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-feature-settings: "ss01", "ss02";
+}
+
+.hand {
+  font-family: var(--font-hand), "Caveat", cursive;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.scanline::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(51, 255, 102, 0.025) 0px,
+    rgba(51, 255, 102, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 50;
+}
+
+/* ===== scene theme: web90s ===== */
+[data-theme="web90s"] {
+  background:
+    linear-gradient(180deg, #d4d0c8 0%, #c0c0c0 100%);
+  color: #000;
+  font-family: "Times New Roman", Times, serif;
+}
+[data-theme="web90s"] ::selection { background: #000080; color: #fff; }
+
+[data-theme="web90s"] .text-fg,
+[data-theme="web90s"] .text-fg-muted { color: #000; }
+
+[data-theme="web90s"] h1.scene-title {
+  font-family: "Impact", "Arial Black", "Helvetica Neue", sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: #cc0033;
+  text-shadow: 2px 2px 0 #ffeb3b;
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="web90s"] .era-line {
+  color: #0000ee;
+  text-decoration: underline;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 0.9rem;
+}
+
+[data-theme="web90s"] .narration-90s p {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #000;
+  margin: 0;
+}
+
+[data-theme="web90s"] .section-label {
+  color: #006666;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+[data-theme="web90s"] input[type="text"] {
+  background: #fff;
+  border: 2px inset #808080;
+  border-radius: 0;
+  padding: 6px 10px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1rem;
+  color: #000;
+  outline: none;
+}
+[data-theme="web90s"] input[type="text"]:focus {
+  border-color: #000080;
+}
+
+[data-theme="web90s"] button[type="submit"] {
+  background: #c0c0c0;
+  border: 2px outset #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  border-radius: 0;
+  padding: 6px 18px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+}
+[data-theme="web90s"] button[type="submit"]:active:not(:disabled) {
+  border-style: inset;
+  border-color: #404040;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+[data-theme="web90s"] button[type="submit"]:disabled {
+  color: #666;
+  cursor: not-allowed;
+}
+
+[data-theme="web90s"] .border-rule {
+  border-color: #808080 !important;
+}
+
+[data-theme="web90s"] .scene-divider {
+  border-top: 2px ridge #808080;
+}
+
+/* ===== scene-wrapper defaults: hidden chrome in non-mac themes ===== */
+.scene-titlebar { display: none; }
+.desktop-icon-grid { display: none; }
+
+/* ===== scene theme: macos7 ===== */
+[data-theme="macos7"] {
+  background-color: #9a9a9a;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.22) 1px, transparent 1px);
+  background-size: 4px 4px;
+  color: #000;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+[data-theme="macos7"] ::selection { background: #000; color: #fff; }
+
+[data-theme="macos7"] .scene-wrapper {
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 0;
+  box-shadow: 1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 rgba(0, 0, 0, 0.3);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+[data-theme="macos7"] .scene-titlebar {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  background: repeating-linear-gradient(0deg, #000 0 1px, #fff 1px 3px);
+  border-bottom: 1px solid #000;
+  padding: 0 5px;
+  position: relative;
+}
+
+[data-theme="macos7"] .scene-titlebar-close {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #000;
+  background: #fff;
+  z-index: 1;
+}
+
+[data-theme="macos7"] .scene-titlebar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 0 10px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+[data-theme="macos7"] .scene-body {
+  padding: 1.75rem 2.25rem 2.25rem;
+  background: #fff;
+}
+
+[data-theme="macos7"] {
+  position: relative;
+}
+[data-theme="macos7"] .scene-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="macos7"] .desktop-icon-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 0;
+}
+
+[data-theme="macos7"] .desktop-icon {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 72px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+[data-theme="macos7"] .desktop-icon-image {
+  width: 32px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: #000;
+  position: relative;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+[data-theme="macos7"] .desktop-icon-image::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  background: #9a9a9a;
+  border-left: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+[data-theme="macos7"] .desktop-icon-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+[data-theme="macos7"] .desktop-icon-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  padding: 0 3px;
+  line-height: 1.2;
+}
+
+[data-theme="macos7"] .desktop-icon.clicked .desktop-icon-image {
+  background: #000;
+  color: #fff;
+}
+[data-theme="macos7"] .desktop-icon.clicked .desktop-icon-image::after {
+  background: #000;
+}
+[data-theme="macos7"] .desktop-icon.clicked .desktop-icon-label {
+  background: #000;
+  color: #fff;
+}
+
+/* ===== scene theme: nullspire ===== */
+[data-theme="nullspire"] {
+  background:
+    radial-gradient(ellipse at center, #1a1745 0%, #08051d 100%);
+  color: #e8d8a8;
+  font-family: Georgia, "Times New Roman", serif;
+}
+[data-theme="nullspire"] ::selection { background: #d4af37; color: #08051d; }
+
+[data-theme="nullspire"] .text-fg,
+[data-theme="nullspire"] .text-fg-muted {
+  color: #e8d8a8;
+}
+
+[data-theme="nullspire"] h1.scene-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-style: italic;
+  color: #d4af37;
+  letter-spacing: 0.02em;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 14px rgba(212, 175, 55, 0.35);
+}
+
+[data-theme="nullspire"] .era-line {
+  color: #c48a2a;
+  text-decoration: none;
+  text-transform: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="nullspire"] .section-label {
+  color: #c48a2a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  font-weight: 600;
+}
+
+[data-theme="nullspire"] .border-rule {
+  border-color: #4a3a1a !important;
+}
+
+/* ===== hex flower (council) ===== */
+.hex-flower {
+  position: relative;
+  width: 760px;
+  height: 760px;
+  margin: 2rem auto 1rem;
+  max-width: 100%;
+}
+
+.hex-card {
+  position: absolute;
+  width: 270px;
+  height: 234px;
+  background: #d4af37;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.hex-card:hover:not(:disabled) {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.55));
+}
+
+.hex-card:disabled {
+  cursor: default;
+}
+
+.hex-card-inner {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  margin: 2px;
+  background: #1a1745;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.hex-card.clicked .hex-card-inner {
+  background: #2a2055;
+}
+.hex-card.clicked {
+  filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.6));
+}
+
+.hex-card[data-position="center"] .hex-card-inner {
+  background: #08051d;
+}
+
+.hex-card-sigil {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 30px;
+  color: #d4af37;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.hex-card-name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+.hex-card-tagline {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #c8b890;
+  line-height: 1.3;
+  margin-top: 6px;
+  max-width: 195px;
+}
+
+.hex-card[data-position="center"] { top: 263px; left: 245px; }
+.hex-card[data-position="n"]      { top:  29px; left: 245px; }
+.hex-card[data-position="ne"]     { top: 146px; left: 447px; }
+.hex-card[data-position="se"]     { top: 380px; left: 447px; }
+.hex-card[data-position="s"]      { top: 497px; left: 245px; }
+.hex-card[data-position="sw"]     { top: 380px; left:  42px; }
+.hex-card[data-position="nw"]     { top: 146px; left:  42px; }
+
+/* ===== scene theme: pos (point-of-sale / convenience store) ===== */
+[data-theme="pos"] {
+  --bg: #0a0606;
+  --bg-elev: #160a0c;
+  --fg: #f0dad0;
+  --fg-muted: #a01828;
+  --accent: #ff2a3a;
+  --accent-dim: #8a1a20;
+  --rule: #3a1015;
+  --warn: #ff7a00;
+
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Monaco", "Andale Mono", "Courier New", monospace;
+}
+[data-theme="pos"] ::selection { background: #ff2a3a; color: #0a0606; }
+
+[data-theme="pos"] h1.scene-title {
+  font-family: "Monaco", "Andale Mono", "Courier New", monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ff2a3a;
+  font-size: 1.875rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-shadow:
+    0 0 8px rgba(255, 42, 58, 0.5),
+    0 0 16px rgba(255, 42, 58, 0.25);
+}
+
+[data-theme="pos"] .era-line {
+  color: #a01828;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: "Monaco", "Andale Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  text-decoration: none;
+  font-style: normal;
+}
+
+[data-theme="pos"] .section-label {
+  color: #ff2a3a;
+  font-family: "Monaco", "Andale Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.ambient-embed {
+  border: 1px solid var(--rule);
+  background: #000;
+}
+.ambient-embed-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: #000;
+}
+
+.export-reveal-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-term, "Monaco", monospace);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow:
+    0 0 12px rgba(51, 255, 102, 0.22),
+    inset 0 0 12px rgba(51, 255, 102, 0.05);
+}
+.export-reveal-button:hover {
+  background: rgba(51, 255, 102, 0.08);
+  box-shadow:
+    0 0 24px rgba(51, 255, 102, 0.45),
+    inset 0 0 16px rgba(51, 255, 102, 0.1);
+  transform: translateY(-1px);
+}
+
+[data-theme="macos7"] .text-fg,
+[data-theme="macos7"] .text-fg-muted { color: #000; }
+
+[data-theme="macos7"] h1.scene-title {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  color: #000;
+  font-size: 2.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #000;
+  padding-bottom: 0.5rem;
+  text-shadow: none;
+}
+
+[data-theme="macos7"] .era-line {
+  color: #555;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+[data-theme="macos7"] .section-label {
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+[data-theme="macos7"] input[type="text"] {
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 0;
+  padding: 6px 10px;
+  font-family: "Monaco", "Courier New", monospace;
+  font-size: 0.95rem;
+  color: #000;
+  outline: none;
+  box-shadow: inset 1px 1px 0 #888;
+}
+[data-theme="macos7"] input[type="text"]:focus {
+  border-color: #000;
+  box-shadow: inset 1px 1px 0 #444;
+}
+
+[data-theme="macos7"] button[type="submit"] {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 9px;
+  padding: 4px 18px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 1px 1px 0 #555;
+}
+[data-theme="macos7"] button[type="submit"]:active:not(:disabled) {
+  background: #c8c8c8;
+  box-shadow: inset 1px 1px 0 #444;
+}
+[data-theme="macos7"] button[type="submit"]:disabled {
+  color: #888;
+  cursor: not-allowed;
+  background: #e0e0e0;
+  border-color: #888;
+  box-shadow: none;
+}
+
+[data-theme="macos7"] .border-rule {
+  border-color: #888 !important;
+}
+
