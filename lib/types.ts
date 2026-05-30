@@ -23,10 +23,28 @@ export type Choice = {
   unlocks_layer_drop?: boolean;
 };
 
+export type InterstitialLine = {
+  text: string;
+  /** print: instant line · type: char-by-char · command: char-typed, prefixed with "> " */
+  mode?: "print" | "type" | "command";
+  /** ms to pause after this line (default 350) */
+  pause?: number;
+};
+
+export type Interstitial = {
+  /** scene id to jump to once the script completes */
+  advance_to: string;
+  continue_label?: string;
+  lines: InterstitialLine[];
+};
+
 export type LayerDrop = {
-  service_url: string;
+  /** iframe target for an external/in-app layer. Omit when `interstitial` is set. */
+  service_url?: string;
   label: string;
   on_return_insight?: InsightTemplate;
+  /** when set, the drop plays a scripted narrative jump instead of iframing a url */
+  interstitial?: Interstitial;
 };
 
 export type AmbientEmbed = {

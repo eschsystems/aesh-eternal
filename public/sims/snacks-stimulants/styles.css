@@ -1,0 +1,311 @@
+:root {
+  --font-display: "Press Start 2P", "Courier New", monospace;
+  --font-body: "Pixelify Sans", "Trebuchet MS", sans-serif;
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --color-bg: #15110f;
+  --color-panel: rgba(29, 23, 20, 0.88);
+  --color-panel-strong: rgba(12, 10, 9, 0.94);
+  --color-border: rgba(255, 238, 196, 0.24);
+  --color-text: #ffeec4;
+  --color-muted: #c6a978;
+  --color-red: #d3362d;
+  --color-khaki: #c6a85f;
+  --color-green: #30b84f;
+  --color-blue: #49a6ff;
+  --color-yellow: #ffd84a;
+  --color-danger: #ff5d55;
+  --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 10%, rgba(211, 54, 45, 0.18), transparent 28rem),
+    linear-gradient(135deg, #17110f 0%, #261d18 50%, #11100e 100%);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  cursor: pointer;
+  border: 2px solid var(--color-border);
+  background: #3b211c;
+  color: var(--color-text);
+  box-shadow: 0 4px 0 #100907;
+  transition:
+    transform var(--transition-interactive),
+    background var(--transition-interactive),
+    border-color var(--transition-interactive);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 216, 74, 0.8);
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #100907;
+}
+
+button.secondary {
+  background: #1f2620;
+}
+
+select {
+  min-height: 44px;
+  border: 2px solid var(--color-border);
+  background: var(--color-panel-strong);
+  color: var(--color-text);
+  padding: 0 var(--space-2);
+}
+
+.skip-link {
+  position: fixed;
+  left: var(--space-3);
+  top: var(--space-3);
+  z-index: 100;
+  transform: translateY(-160%);
+  color: var(--color-text);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.game-shell {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+canvas {
+  width: 100vw;
+  height: 100vh;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.hud,
+.controls {
+  position: fixed;
+  z-index: 10;
+  border: 2px solid var(--color-border);
+  background: var(--color-panel);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+  padding: var(--space-3);
+  color: var(--color-text);
+}
+
+.hud p,
+.hud label {
+  margin: 0;
+}
+
+.hud p + p,
+.hud label + label {
+  margin-top: var(--space-1);
+}
+
+.hud span,
+.hud label {
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+}
+
+.hud strong {
+  display: block;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.brand {
+  margin-bottom: var(--space-2) !important;
+  color: var(--color-yellow);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.hud-top-left {
+  top: var(--space-3);
+  left: var(--space-3);
+  min-width: 210px;
+}
+
+.hud-top-right {
+  top: var(--space-3);
+  right: var(--space-3);
+  min-width: 150px;
+}
+
+.hud-bottom-left {
+  bottom: var(--space-3);
+  left: var(--space-3);
+  width: min(520px, calc(100vw - 2rem));
+}
+
+.hud-bottom-right {
+  right: var(--space-3);
+  bottom: var(--space-3);
+  min-width: 230px;
+}
+
+.meters meter {
+  display: block;
+  width: 100%;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.event-log {
+  margin: var(--space-2) 0 0;
+  padding-left: 1.1rem;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  line-height: 1.25;
+}
+
+.controls {
+  left: 50%;
+  bottom: 13rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transform: translateX(-50%);
+}
+
+.game-shell:not(.is-started) .controls {
+  display: none;
+}
+
+.controls label {
+  color: var(--color-muted);
+}
+
+.start-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(rgba(10, 8, 7, 0.72), rgba(10, 8, 7, 0.84)),
+    repeating-linear-gradient(0deg, transparent 0 6px, rgba(255, 255, 255, 0.03) 6px 8px);
+  padding: var(--space-4);
+}
+
+.start-overlay.hidden {
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 240ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.start-card {
+  width: min(680px, 100%);
+  border: 3px solid var(--color-border);
+  background: var(--color-panel-strong);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.55);
+  padding: var(--space-8);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-green);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0 0 var(--space-4);
+  color: var(--color-yellow);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  line-height: 1.35;
+}
+
+.start-card p {
+  max-width: 62ch;
+  font-size: var(--text-base);
+  line-height: 1.45;
+}
+
+.start-card button {
+  margin-top: var(--space-4);
+  margin-right: var(--space-2);
+  padding: 0 var(--space-4);
+}
+
+@media (max-width: 860px) {
+  .hud {
+    padding: var(--space-2);
+  }
+
+  .hud-bottom-left {
+    display: none;
+  }
+
+  .hud-top-left {
+    min-width: 176px;
+  }
+
+  .hud-top-right {
+    min-width: 118px;
+  }
+
+  .hud-bottom-right {
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: var(--space-3);
+    min-width: 0;
+  }
+
+  .controls {
+    width: calc(100vw - 1.5rem);
+    bottom: 12rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-1);
+    padding: var(--space-2);
+  }
+
+  .controls button,
+  .controls select {
+    min-height: 40px;
+  }
+
+  .hud-top-left,
+  .hud-top-right,
+  .hud-bottom-right {
+    font-size: 0.75rem;
+  }
+}

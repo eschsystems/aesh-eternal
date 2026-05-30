@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Snacks & Stimulants is an 8-bit real-clock solo retail shift simulation based on Darren's Modified Method."
+    />
+    <meta property="og:title" content="Snacks & Stimulants - Darren's Modified Method" />
+    <meta
+      property="og:description"
+      content="An autonomous 8-bit convenience-store night-shift simulator with customers, cash fondlers, messes, Lady Scrubberton, and chiptune chaos."
+    />
+    <title>Snacks & Stimulants - Darren's Modified Method</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#game">Skip to simulation</a>
+    <main id="game" class="game-shell" aria-label="Snacks & Stimulants simulation">
+      <canvas id="gameCanvas" width="1280" height="720" aria-label="8-bit store simulation"></canvas>
+
+      <section class="hud hud-top-left" aria-label="Simulation status">
+        <p class="brand">Snacks &amp; Stimulants</p>
+        <p><span>Time</span><strong id="hudTime">--:--</strong></p>
+        <p><span>Phase</span><strong id="hudPhase">Loading</strong></p>
+        <p><span>Method</span><strong id="hudPressure">On Method</strong></p>
+      </section>
+
+      <section class="hud hud-top-right" aria-label="Customer status">
+        <p><span>Served</span><strong id="hudServed">0</strong></p>
+        <p><span>In Store</span><strong id="hudCustomers">0</strong></p>
+        <p><span>Queue</span><strong id="hudQueue">0</strong></p>
+      </section>
+
+      <section class="hud hud-bottom-left" aria-label="Task status">
+        <p><span>Task</span><strong id="hudTask">Booting the ritual</strong></p>
+        <p><span>Resume</span><strong id="hudResume">None</strong></p>
+        <ol id="eventLog" class="event-log" aria-label="Recent events"></ol>
+      </section>
+
+      <section class="hud hud-bottom-right meters" aria-label="Meters">
+        <label>Cash <strong id="cashLabel">$0</strong><meter id="cashMeter" min="0" max="75" value="0"></meter></label>
+        <label>Body <strong id="bodyLabel">0%</strong><meter id="bodyMeter" min="0" max="100" value="0"></meter></label>
+        <label>Clean <strong id="cleanLabel">100%</strong><meter id="cleanMeter" min="0" max="100" value="100"></meter></label>
+      </section>
+
+      <section class="controls" aria-label="Simulation controls">
+        <button id="audioBtn" type="button">Start Shift + Audio</button>
+        <button id="muteBtn" type="button" aria-pressed="false">Mute</button>
+        <label for="timeSelect">Preview</label>
+        <select id="timeSelect">
+          <option value="real">Real clock</option>
+          <option value="22:15">22:15 Judgement</option>
+          <option value="00:45">00:45 Unboxening</option>
+          <option value="03:15">03:15 Kitchen</option>
+          <option value="04:30">04:30 Reflection</option>
+          <option value="05:10">05:10 Hoard</option>
+        </select>
+      </section>
+
+      <section id="startOverlay" class="start-overlay" aria-label="Start simulation">
+        <div class="start-card">
+          <p class="eyebrow">real-clock prototype</p>
+          <h1>Snacks &amp; Stimulants</h1>
+          <p>
+            Adam follows Darren's Modified Method while named customers wander in through four entrances,
+            fondle cash, make messes, and interrupt the ritual.
+          </p>
+          <button id="startBtn" type="button">Start Shift + Chiptune</button>
+          <button id="silentBtn" class="secondary" type="button">Start Silent</button>
+        </div>
+      </section>
+    </main>
+    <script src="./src/main.js" defer></script>
+  </body>
+</html>

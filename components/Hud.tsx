@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { Artifact, DesktopIcon, Insight, Persona, Scene, SceneInput as SceneInputT } from "@/lib/types";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { Artifact, DesktopIcon, Insight, Interstitial, Persona, Scene, SceneInput as SceneInputT } from "@/lib/types";
 
 type Props = {
   initialScene: Scene;
@@ -158,6 +158,21 @@ export default function Hud({ initialScene, allScenes }: Props) {
     }
   }
 
+  function completeInterstitial() {
+    const drop = scene.layer_drop;
+    if (drop?.on_return_insight && !visitedLayerDrops.has(scene.id)) {
+      addInsight({
+        kind: drop.on_return_insight.kind,
+        payload: drop.on_return_insight.payload,
+        tags: drop.on_return_insight.tags,
+      });
+      setVisitedLayerDrops((prev) => new Set(prev).add(scene.id));
+    }
+    const target = drop?.interstitial?.advance_to;
+    setLayerDropOpen(false);
+    if (target) switchScene(target);
+  }
+
   function openArtifact(id: string) {
     const artifact = scene.artifacts?.find((a) => a.id === id);
     if (!artifact) return;
@@ -203,6 +218,13 @@ export default function Hud({ initialScene, allScenes }: Props) {
     setExportRevealOpen(false);
   }
 
+  const sceneIndex = allScenes.findIndex((s) => s.id === scene.id);
+  const prevScene = sceneIndex > 0 ? allScenes[sceneIndex - 1] : null;
+  const nextScene =
+    sceneIndex >= 0 && sceneIndex < allScenes.length - 1
+      ? allScenes[sceneIndex + 1]
+      : null;
+
   return (
     <div className={`${!!scene.theme && scene.theme !== "terminal" ? "" : "scanline"} min-h-dvh flex flex-col bg-bg text-fg`}>
       <header className="border-b border-rule px-6 py-3 flex items-center justify-between text-xs uppercase tracking-widest text-fg-muted">
@@ -239,12 +261,42 @@ export default function Hud({ initialScene, allScenes }: Props) {
         <InventoryPane insights={insights} />
       </div>
 
-      <footer className="border-t border-rule px-6 py-2 text-[10px] uppercase tracking-widest text-fg-muted flex justify-between">
-        <span>API → /api/scene · /api/insight · /api/export · /api/advance</span>
-        <span>esc to exit a layer · click choices to capture</span>
+      <footer className="border-t border-rule px-6 py-2 text-[10px] uppercase tracking-widest text-fg-muted flex items-center justify-between gap-4">
+        <span className="flex-1 truncate hidden sm:block">
+          API → /api/scene · /api/insight · /api/export · /api/advance
+        </span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => prevScene && switchScene(prevScene.id)}
+            disabled={!prevScene}
+            className="border border-rule px-3 py-1 hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-rule disabled:hover:text-fg-muted disabled:cursor-not-allowed"
+          >
+            ‹ prev
+          </button>
+          <span className="text-fg">
+            scene {sceneIndex + 1}/{allScenes.length}
+          </span>
+          <button
+            onClick={() => nextScene && switchScene(nextScene.id)}
+            disabled={!nextScene}
+            className="border border-rule px-3 py-1 hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-rule disabled:hover:text-fg-muted disabled:cursor-not-allowed"
+          >
+            next ›
+          </button>
+        </div>
+        <span className="flex-1 text-right truncate hidden sm:block">
+          esc to exit a layer · click choices to capture
+        </span>
       </footer>
 
-      {layerDropOpen && scene.layer_drop && (
+      {layerDropOpen && scene.layer_drop?.interstitial && (
+        <ZorkInterstitial
+          interstitial={scene.layer_drop.interstitial}
+          onComplete={completeInterstitial}
+        />
+      )}
+
+      {layerDropOpen && scene.layer_drop && !scene.layer_drop.interstitial && scene.layer_drop.service_url && (
         <LayerDropOverlay
           url={scene.layer_drop.service_url}
           label={scene.layer_drop.label}
@@ -812,6 +864,94 @@ function ExportRevealModal({
       >
         {content}
       </pre>
+    </div>
+  );
+}
+
+function ZorkInterstitial({
+  interstitial,
+  onComplete,
+}: {
+  interstitial: Interstitial;
+  onComplete: () => void;
+}) {
+  const [rendered, setRendered] = useState("");
+  const [done, setDone] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    let buf = "";
+    const push = (t: string) => {
+      buf += t;
+      if (!cancelled) setRendered(buf);
+    };
+
+    async function play() {
+      await sleep(500);
+      for (const line of interstitial.lines) {
+        if (cancelled) return;
+        const text = line.mode === "command" ? `> ${line.text}` : line.text;
+        if (line.mode === "command" || line.mode === "type") {
+          for (const ch of text) {
+            if (cancelled) return;
+            push(ch);
+            await sleep(24);
+          }
+          push("\n");
+        } else {
+          push(text + "\n");
+        }
+        await sleep(line.pause ?? 350);
+      }
+      if (!cancelled) setDone(true);
+    }
+
+    play();
+    return () => {
+      cancelled = true;
+    };
+  }, [interstitial]);
+
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [rendered, done]);
+
+  return (
+    <div className="fixed inset-0 z-40 bg-black flex flex-col scanline">
+      <div className="flex items-center justify-between border-b border-rule px-6 py-3 text-xs uppercase tracking-widest">
+        <span className="text-accent">zork · the great underground empire</span>
+        <button
+          onClick={onComplete}
+          className="text-fg-muted hover:text-accent border border-rule px-3 py-1"
+        >
+          skip »
+        </button>
+      </div>
+      <div ref={scrollRef} className="flex-1 overflow-auto px-8 py-6">
+        <pre
+          className="text-accent text-base sm:text-lg leading-relaxed whitespace-pre-wrap"
+          style={{ textShadow: "0 0 6px rgba(51, 255, 102, 0.45)", fontFamily: "var(--font-term), ui-monospace, monospace" }}
+        >
+          {rendered}
+          {!done && (
+            <span className="inline-block w-2 h-4 bg-accent align-[-0.1em] animate-[zblink_1s_step-end_infinite]" />
+          )}
+        </pre>
+        {done && (
+          <button
+            onClick={onComplete}
+            className="mt-10 border border-accent px-6 py-3 text-accent uppercase tracking-widest text-sm hover:bg-accent/10 transition-colors animate-[fadeIn_500ms_ease-out]"
+          >
+            {interstitial.continue_label ?? "continue"} ›
+          </button>
+        )}
+      </div>
+      <style>{`
+        @keyframes zblink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      `}</style>
     </div>
   );
 }
