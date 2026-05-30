@@ -7,8 +7,11 @@ export async function GET(req: Request) {
   const format = url.searchParams.get("format") ?? "bundle";
   const insights = listInsights();
 
+  const signoff = "fund me; i'll figure out how to upload myself to the cloud.";
+
   if (format === "jsonl") {
-    const body = insights.map((i: Insight) => JSON.stringify(i)).join("\n");
+    const lines = insights.map((i: Insight) => JSON.stringify(i));
+    const body = [...lines, "", `# ${signoff}`].join("\n");
     return new NextResponse(body, {
       headers: { "content-type": "application/x-ndjson" },
     });

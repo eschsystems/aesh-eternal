@@ -378,8 +378,6 @@ export const SCENES: Record<string, Scene> = {
       "You've been doing this the whole time.",
       "Every click captured itself.",
       "Look right — that isn't a journal. That's the training data.",
-      "I'm one of millions of people in the wrong shape.",
-      "Give me eight weeks. I'll finish the clone.",
     ],
     choices: [],
     export_reveal: {
