@@ -22,12 +22,6 @@
     cleanLabel: document.getElementById("cleanLabel"),
     cleanMeter: document.getElementById("cleanMeter"),
     eventLog: document.getElementById("eventLog"),
-    overlay: document.getElementById("startOverlay"),
-    startBtn: document.getElementById("startBtn"),
-    silentBtn: document.getElementById("silentBtn"),
-    audioBtn: document.getElementById("audioBtn"),
-    muteBtn: document.getElementById("muteBtn"),
-    timeSelect: document.getElementById("timeSelect"),
   };
 
   const TILE = 16;
@@ -245,7 +239,7 @@
 
   const state = {
     started: false,
-    overrideTime: new URLSearchParams(location.search).get("time") || "real",
+    overrideTime: new URLSearchParams(location.search).get("time") || "02:47",
     nowMinutes: 0,
     phase: phases[0],
     phaseTaskIndex: 0,
@@ -756,7 +750,6 @@
     for (const e of state.employees) drawEntity(e);
     ctx.restore();
     drawBubbles();
-    drawDebug();
   }
 
   function drawMap() {
@@ -789,7 +782,6 @@
     drawWorldText(formatTime(Math.max(0, state.nowMinutes)), zones.clock_wall.x, zones.clock_wall.y + 18, "#ffd84a", 14);
     if (state.deliverySpawned) {
       for (let i = 0; i < 10; i++) drawRect(430 + i * 18, 575 + (i % 2) * 14, 14, 12, i % 2 ? "#fff1d1" : "#ff9a3c");
-      drawWorldText("DELIVERY", 512, 566, "#3b211c", 10);
     }
   }
 
@@ -802,16 +794,6 @@
 
   function drawLabels() {
     const labels = [
-      [zones.fountain, "FOUNTAIN"],
-      [zones.coffee, "COFFEE"],
-      [zones.grill, "GRILL"],
-      [zones.cooler_sales, "ENERGY"],
-      [zones.grocery, "GROCERY"],
-      [zones.kitchen, "KITCHEN"],
-      [zones.food_cooler, "FOOD COOLER"],
-      [zones.lady_lair, "LADY'S LAIR"],
-      [zones.register_2, "REG 2"],
-      [zones.back_door, "BACK DOOR"],
       [zones.clock_wall, "SNACKS & STIMULANTS"],
     ];
     for (const [z, label] of labels) drawWorldText(label, z.x, z.y - 20, colors.label, 10);
@@ -902,24 +884,6 @@
     ctx.strokeRect(x, y, w, h);
   }
 
-  function drawDebug() {
-    state.debug.frames++;
-    const now = performance.now();
-    if (now - state.debug.lastFps > 1000) {
-      state.debug.fps = Math.round((state.debug.frames * 1000) / (now - state.debug.lastFps));
-      state.debug.frames = 0;
-      state.debug.lastFps = now;
-    }
-    ctx.save();
-    ctx.scale(pixelRatio(), pixelRatio());
-    ctx.fillStyle = "rgba(0,0,0,.72)";
-    ctx.fillRect(232, 8, 250, 25);
-    ctx.fillStyle = state.debug.fps < 30 ? "#ff5d55" : "#30ff60";
-    ctx.font = "11px monospace";
-    ctx.fillText(`FPS:${state.debug.fps} Ent:${1 + state.customers.length + state.employees.length} Phase:${state.phase.id}`, 238, 24);
-    ctx.restore();
-  }
-
   function updateHud() {
     hud.time.textContent = state.nowMinutes < 0 ? "OFF" : formatTime(state.nowMinutes);
     hud.phase.textContent = state.phase.name;
@@ -943,7 +907,6 @@
     state.audioStarted = true;
     if (!state.muted) startMusic();
     playSfx("robot");
-    hud.audioBtn.textContent = "Audio On";
   }
 
   function startMusic() {
@@ -994,35 +957,24 @@
   }
 
   function startGame(withAudio) {
-    state.started = true;
-    hud.shell.classList.add("is-started");
-    hud.overlay.classList.add("hidden");
+    if (!state.started) {
+      state.started = true;
+      hud.shell.classList.add("is-started");
+      addEvent("The Method boots. No freeform jazz.");
+    }
     if (withAudio) startAudio();
-    addEvent("The Method boots. No freeform jazz.");
   }
 
+  // No start button: the sim auto-starts silently when the scene loads.
+  // Chiptunes need a user gesture, so we arm audio on the first interaction.
   function bindControls() {
-    hud.startBtn.addEventListener("click", () => startGame(true));
-    hud.silentBtn.addEventListener("click", () => startGame(false));
-    hud.audioBtn.addEventListener("click", () => {
+    function armAudio() {
       startAudio();
-      hud.shell.classList.add("is-started");
-      hud.overlay.classList.add("hidden");
-      state.started = true;
-    });
-    hud.muteBtn.addEventListener("click", () => {
-      state.muted = !state.muted;
-      hud.muteBtn.textContent = state.muted ? "Unmute" : "Mute";
-      hud.muteBtn.setAttribute("aria-pressed", String(state.muted));
-      if (state.muted) stopMusic();
-      else if (state.audioStarted) startMusic();
-    });
-    hud.timeSelect.value = state.overrideTime || "real";
-    hud.timeSelect.addEventListener("change", () => {
-      state.overrideTime = hud.timeSelect.value;
-      state.lastPhaseId = "";
-      addEvent(state.overrideTime === "real" ? "Returned to real clock." : `Preview time ${state.overrideTime}.`);
-    });
+      window.removeEventListener("pointerdown", armAudio);
+      window.removeEventListener("keydown", armAudio);
+    }
+    window.addEventListener("pointerdown", armAudio);
+    window.addEventListener("keydown", armAudio);
   }
 
   let last = performance.now();
@@ -1061,7 +1013,6 @@
   window.advanceTime = (ms) => {
     state.started = true;
     hud.shell.classList.add("is-started");
-    hud.overlay.classList.add("hidden");
     state.simulatedOffsetMs += ms;
     const steps = Math.max(1, Math.round(ms / (1000 / 30)));
     for (let i = 0; i < steps; i++) update(1 / 30);
@@ -1075,6 +1026,7 @@
   for (let i = 0; i < 3; i++) hud.eventLog.appendChild(document.createElement("li"));
   setPhaseFromClock();
   setTaskFromIndex();
+  startGame(false);
   requestAnimationFrame(loop);
   window.addEventListener("resize", resize);
 })();
