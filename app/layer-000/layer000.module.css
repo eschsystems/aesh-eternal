@@ -1,0 +1,106 @@
+.crt {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, #07140a 0%, #000 95%);
+  overflow: hidden;
+  color: #33ff66;
+  font-family: var(--font-vt), "VT323", "Courier New", monospace;
+  cursor: default;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  padding: 28px 36px 36px;
+  font-size: 22px;
+  line-height: 1.15;
+  text-shadow: 0 0 6px rgba(51, 255, 102, 0.55);
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  animation: flicker 5.2s infinite;
+}
+
+.screen::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.output {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre;
+}
+
+.promptLine {
+  display: inline;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.prompt {
+  color: #33ff66;
+}
+
+.input {
+  white-space: pre;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.95em;
+  background: #33ff66;
+  box-shadow: 0 0 6px rgba(51, 255, 102, 0.55);
+  vertical-align: -0.12em;
+  margin-left: 1px;
+  animation: blink 1.05s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+.scanlines {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.2) 3px,
+    rgba(0, 0, 0, 0.2) 4px
+  );
+  mix-blend-mode: multiply;
+  z-index: 2;
+}
+
+.vignette {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
+  z-index: 3;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.985;
+  }
+  50% {
+    opacity: 0.94;
+  }
+  52% {
+    opacity: 0.985;
+  }
+}

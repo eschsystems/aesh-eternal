@@ -816,6 +816,8 @@ function ExportRevealModal({
   );
 }
 
+const LAYER_DROP_AUTO_RETURN_S = 12;
+
 function LayerDropOverlay({
   url,
   label,
@@ -825,16 +827,34 @@ function LayerDropOverlay({
   label: string;
   onClose: () => void;
 }) {
+  const [remaining, setRemaining] = useState(LAYER_DROP_AUTO_RETURN_S);
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setRemaining((r) => Math.max(0, r - 1));
+    }, 1000);
+    const timeout = setTimeout(onClose, LAYER_DROP_AUTO_RETURN_S * 1000);
+    return () => {
+      clearInterval(tick);
+      clearTimeout(timeout);
+    };
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 z-40 bg-black/95 flex flex-col">
       <div className="flex items-center justify-between border-b border-rule px-6 py-3 text-xs uppercase tracking-widest">
         <span className="text-accent">layer-drop · {label}</span>
-        <button
-          onClick={onClose}
-          className="text-fg-muted hover:text-accent border border-rule px-3 py-1"
-        >
-          ↩ return to thread
-        </button>
+        <div className="flex items-center gap-4">
+          <span className="text-fg-muted">
+            auto-return in <span className="text-accent">{remaining}s</span>
+          </span>
+          <button
+            onClick={onClose}
+            className="text-fg-muted hover:text-accent border border-rule px-3 py-1"
+          >
+            ↩ return to thread
+          </button>
+        </div>
       </div>
       <iframe
         src={url}

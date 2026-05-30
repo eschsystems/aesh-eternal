@@ -48,7 +48,7 @@ export const SCENES: Record<string, Scene> = {
       },
     ],
     layer_drop: {
-      service_url: "http://localhost:3001",
+      service_url: "/layer-000",
       label: "boot Layer-000 (i-heart-ct)",
       on_return_insight: {
         kind: "rag",

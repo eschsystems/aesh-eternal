@@ -21,7 +21,13 @@
       "Bash(curl -s \"http://localhost:3000/api/export?format=jsonl\")",
       "Bash(git init *)",
       "Bash(git symbolic-ref *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git checkout *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} %{size_download} bytes\\\\n\" http://localhost:3000/map)",
+      "Bash(curl -s http://localhost:3000/map)",
+      "Bash(git rev-list *)",
+      "Bash(git stash *)"
     ]
   }
 }
